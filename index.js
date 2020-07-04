@@ -1,41 +1,37 @@
+"use-strict";
+
 import React, { PureComponent } from "react";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
+import { WebView } from "react-native-webview";
 import {
-  ActivityIndicator,
-  ScrollView,
-  StyleSheet,
-  View,
-  Text
-} from "react-native";
-import HTMLView from "react-native-htmlview";
-import { cleanHtml } from "clean-html-js";
+  cleanHtml,
+  cleanHtmlCss,
+  cleanHtmlTemplate,
+  defaultHtmlCss
+} from "./util";
 
-class ReadabilityView extends PureComponent {
-  constructor(props) {
-    super(props);
+export default class ReadabilityWebView extends PureComponent {
+  static defaultProps = {
+    url: "",
+    htmlCss: defaultHtmlCss,
+    title: "",
+    onError: null,
+    readerMode: true,
+    renderLoader: null
+  };
 
-    this.state = {
-      cleanHtmlSource: undefined
-    };
+  state = {
+    cleanHtmlSource: undefined,
+    readabilityArticle: null
+  };
 
-    this.parseHtml = this.parseHtml.bind(this);
-  }
+  async componentDidMount() {
+    const { url, htmlCss, title, readerMode } = this.props;
 
-  componentDidMount() {
-    this.parseHtml();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (
-      this.props.url !== prevProps.url ||
-      this.props.title !== prevProps.title
-    ) {
-      this.parseHtml();
+    if (!readerMode) {
+      this.toggleReaderMode();
+      return;
     }
-  }
-
-  async parseHtml() {
-    const { url, title, onError } = this.props;
-
     try {
       const response = await fetch(url);
       const html = await response.text();
@@ -43,24 +39,56 @@ class ReadabilityView extends PureComponent {
 
       this.setState({
         cleanHtmlSource: !readabilityArticle
-          ? `<h1>Sorry, issue parsing ${url}</h1>`
-          : readabilityArticle.content
+          ? false
+          : cleanHtmlTemplate(
+              htmlCss ? htmlCss : cleanHtmlCss,
+              title || readabilityArticle.title,
+              readabilityArticle.content
+            ),
+        readabilityArticle
       });
     } catch (err) {
-      if (onError) {
-        onError(err);
+      if (this.props.onError) {
+        this.props.onError(err);
       }
     }
   }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.htmlCss !== prevProps.htmlCss) {
+      this.refreshHtml();
+    } else if (this.props.readerMode !== prevProps.readerMode) {
+      this.toggleReaderMode(this.props.readerMode);
+    }
+  }
+
+  refreshHtml: void = () => {
+    if (this.state.readabilityArticle) {
+      this.setState({
+        cleanHtmlSource: cleanHtmlTemplate(
+          this.props.htmlCss,
+          this.props.title || this.state.readabilityArticle.title,
+          this.state.readabilityArticle.content
+        )
+      });
+    }
+  };
+
+  toggleReaderMode: void = (cleanHtmlSource: boolean = false) => {
+    if (!cleanHtmlSource) {
+      this.setState({ cleanHtmlSource });
+    } else {
+      this.refreshHtml();
+    }
+  };
 
   render() {
     const {
       containerStyle,
       loadingContainerStyle,
-      titleStyle,
       indicatorProps,
-      renderLoader,
-      title
+      url,
+      renderLoader
     } = this.props;
     const { cleanHtmlSource } = this.state;
 
@@ -81,37 +109,27 @@ class ReadabilityView extends PureComponent {
             </View>
           )
         ) : (
-          <ScrollView style={[styles.flex, styles.container]}>
-            {title ? (
-              <Text style={[styles.title, titleStyle]}>{title}</Text>
-            ) : null}
-            <HTMLView value={cleanHtmlSource} {...this.props} />
-          </ScrollView>
+          <WebView
+            style={styles.flex}
+            source={
+              !cleanHtmlSource
+                ? {
+                    uri: url
+                  }
+                : {
+                    html: cleanHtmlSource,
+                    baseUrl: url
+                  }
+            }
+            {...this.props}
+          />
         )}
       </View>
     );
   }
 }
 
-ReadabilityView.defaultProps = {
-  url: "",
-  title: "",
-  onError: null,
-  renderLoader: null,
-  indicatorProps: {},
-  loadingContainerStyle: {},
-  containerStyle: {},
-  titleStyle: {}
-};
-
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 36,
-    fontWeight: "600"
-  },
-  container: {
-    paddingHorizontal: 8
-  },
   flex: {
     flex: 1
   },
@@ -120,5 +138,3 @@ const styles = StyleSheet.create({
     alignItems: "center"
   }
 });
-
-export default ReadabilityView;
