@@ -1,4 +1,4 @@
-## react-native-webview-readability
+## react-native-reader-image
 
 This package uses Readability to provide a nice experience for displaying content from any website or url
 
@@ -10,10 +10,12 @@ How to use:
 
 - Just pass in a Url into the component and your good to go.
 
+It's a fork of "react-native-webview-readability" but I add image support
+
 ## Installation Instructions
 
 ```bash
-$ npm install react-native-webview-readability
+$ npm install @squareseidh/react-native-reader-image
 ```
 
 Follow [Getting Started](https://github.com/react-native-community/react-native-webview/blob/master/docs/Getting-Started.md) if react-native-webview is not installed or simply.

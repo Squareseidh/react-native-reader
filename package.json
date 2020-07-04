@@ -1,63 +1,32 @@
 {
-  "_from": "react-native-webview-readability",
-  "_id": "react-native-webview-readability@0.2.7",
-  "_inBundle": false,
-  "_integrity": "sha512-tfhNJIhAqFCP+SUqmE1AZJR+aHwktVrfv2hlrKW4lhLd8uLyol50+U9D/CEjcjTCnkdg7K0cCRdVaQKJCpKOOg==",
-  "_location": "/react-native-webview-readability",
-  "_phantomChildren": {},
-  "_requested": {
-    "type": "tag",
-    "registry": true,
-    "raw": "react-native-webview-readability",
-    "name": "react-native-webview-readability",
-    "escapedName": "react-native-webview-readability",
-    "rawSpec": "",
-    "saveSpec": null,
-    "fetchSpec": "latest"
-  },
-  "_requiredBy": [
-    "#USER",
-    "/"
-  ],
-  "_resolved": "https://registry.npmjs.org/react-native-webview-readability/-/react-native-webview-readability-0.2.7.tgz",
-  "_shasum": "00fb0167c73a47155cc8bac9ea3ad4eaef8c1b94",
-  "_spec": "react-native-webview-readability",
-  "_where": "/Users/nicolasfabri/projects/mobile",
-  "author": {
-    "name": "Jeffrey Mendez",
-    "email": "jeffmendez19@gmail.com"
-  },
-  "bugs": {
-    "url": "https://github.com/jeffreymendez1993/react-native-webview-readability/issues"
-  },
-  "bundleDependencies": false,
-  "dependencies": {
-    "buffer": "^5.2.1",
-    "events": "^3.0.0",
-    "path": "^0.12.7",
-    "react-native-webview": "^8.0.2",
-    "readability-node": "^0.1.0",
-    "sanitize-html": "^1.20.1",
-    "url": "^0.11.0",
-    "url-parse": "^1.4.4",
-    "xmldom-silent": "^0.1.19"
-  },
-  "deprecated": false,
-  "description": "React Native package that turns a Webview into a Safari like Readability View for android and iOS",
-  "homepage": "https://github.com/jeffreymendez1993/react-native-webview-readability#readme",
+  "name": "@squareseidh/react-native-reader-image",
+  "version": "0.1.1",
+  "description": "React Native package that turns a Webview into a Safari like Readability View for android and iOS with images",
   "keywords": [
+    "react-native-readability",
+    "react-native-reader",
     "react-native",
-    "ios",
-    "android",
-    "webview",
     "readability",
-    "react-native-readability"
+    "reader",
+    "ios-reader",
+    "android-android"
   ],
-  "license": "MIT",
-  "name": "react-native-webview-readability",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jeffreymendez1993/react-native-webview-readability.git"
+    "url": "git+https://github.com/Squareseidh/react-native-reader.git"
   },
-  "version": "0.2.7"
+  "dependencies": {
+    "clean-html-js": "^1.0.4",
+    "react-native-htmlview": "^0.15.0"
+  },
+  "author": "Nicolas FABRI <fabri.nicolas@yahoo.fr>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Squareseidh/react-native-reader/issues"
+  },
+  "homepage": "https://github.com/Squareseidh/react-native-reader",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
 }
